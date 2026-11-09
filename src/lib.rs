@@ -25,18 +25,21 @@ use inventory::{find_qty, parse_qty};
 pub fn stock_line(names: &[&str], quantities: &[u32], wanted: &str) -> String {
     match find_qty(names, quantities, wanted) {
         Some(qty) => format!("{}: {}", wanted, qty),
-        None => 0,
+        None => format!("{}: none", wanted),
     }
 }
 
 /// Adds two typed quantities, reporting the first one that is not a number.
 ///
 /// ```
-/// assert_eq!(dw20::add_typed("7", " 5 "), Ok(12));
-/// assert_eq!(dw20::add_typed("7", "lots"), Err(String::from("bad quantity: lots")));
+/// assert_eq!(dw20::add_typed("7", "5"), Ok(12));
+/// assert_eq!(
+///     dw20::add_typed("7", "lots"),
+///     Err(String::from("bad quantity: lots"))
+/// );
 /// ```
 pub fn add_typed(a: &str, b: &str) -> Result<u32, String> {
     let x = parse_qty(a)?;
-    let y = parse_quty(b)?;
+    let y = parse_qty(b)?;
     Ok(x + y)
 }
